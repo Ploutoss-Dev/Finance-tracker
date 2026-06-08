@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FinanceTracker — Personal Finance App
 
-## Getting Started
+A complete personal finance tracking application built with Next.js 16, SQLite, Tailwind CSS v4, and Recharts. Dark mode, mobile responsive, fully local — no external services required.
 
-First, run the development server:
+## Features
+
+| Module | What it does |
+|---|---|
+| **Dashboard** | Net worth, monthly P&L, BTC overview, income vs expenses chart |
+| **Income** | Add/delete income entries by source, category, date |
+| **Expenses** | Add/delete expenses by category with filtering |
+| **Savings** | Set current balance directly (with history log) |
+| **Bitcoin DCA** | Log BTC purchases or set manual holdings; shows avg buy price, P&L |
+| **Tax Overview** | Yearly income/expense/BTC gains tax estimate with configurable rate |
+| **Settings** | BTC price, currency, tax rate, manual BTC toggle |
+
+## Tech Stack
+
+- **Next.js 16** (App Router) + TypeScript
+- **better-sqlite3** — synchronous SQLite, all data stored in `data/finance.db`
+- **Tailwind CSS v4** — dark theme
+- **Recharts** — income/expense bar chart, savings area chart, BTC line chart
+- **lucide-react** — icons
+
+## Setup
 
 ```bash
+cd finance-tracker
+npm install
+
+# Seed with 12 months of sample data (optional)
+node scripts/seed.js
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open **http://localhost:3000**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Folder Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+finance-tracker/
+├── app/
+│   ├── api/
+│   │   ├── income/route.ts       GET, POST, DELETE
+│   │   ├── expenses/route.ts     GET, POST, DELETE
+│   │   ├── savings/route.ts      GET, POST, DELETE
+│   │   ├── bitcoin/route.ts      GET, POST, DELETE
+│   │   ├── settings/route.ts     GET, POST
+│   │   └── dashboard/route.ts    GET (aggregated stats)
+│   ├── income/page.tsx
+│   ├── expenses/page.tsx
+│   ├── savings/page.tsx
+│   ├── bitcoin/page.tsx
+│   ├── tax/page.tsx
+│   ├── settings/page.tsx
+│   ├── layout.tsx
+│   └── page.tsx                  Dashboard
+├── components/
+│   ├── charts/
+│   │   ├── IncomeExpenseChart.tsx
+│   │   ├── SavingsChart.tsx
+│   │   └── BTCChart.tsx
+│   ├── Modal.tsx
+│   ├── Sidebar.tsx
+│   └── StatCard.tsx
+├── lib/
+│   ├── db.ts                     SQLite init + defaults
+│   └── types.ts                  TypeScript interfaces
+├── scripts/
+│   └── seed.js                   Sample data seeder
+└── data/
+    └── finance.db                Auto-created on first run
+```
 
-## Learn More
+## Bitcoin Tracking
 
-To learn more about Next.js, take a look at the following resources:
+Two modes available:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **DCA Mode** (default): Log individual purchases with date, price, and amount. App calculates total holdings, average buy price, and P&L automatically.
+- **Manual Mode**: Set your current BTC amount and average buy price directly. Useful if you already own BTC or use an external wallet.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Switch between modes in Bitcoin Settings or the Settings page.
 
-## Deploy on Vercel
+## Savings Tracking
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The savings balance is a "current state" number — not transaction-based. You set the current balance and the app logs the change history. Useful for manual bank account tracking.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Data
+
+All data is stored locally in `data/finance.db` (SQLite). No accounts, no cloud, no tracking.
