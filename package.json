@@ -9,16 +9,20 @@
     "seed": "node --import tsx/esm scripts/seed.ts"
   },
   "dependencies": {
-    "better-sqlite3": "^12.9.0",
+    "@auth/core": "^0.34.3",
+    "@libsql/client": "^0.17.3",
+    "bcryptjs": "^3.0.3",
     "date-fns": "^4.1.0",
     "lucide-react": "^1.8.0",
     "next": "16.2.4",
+    "next-auth": "^4.24.14",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.8.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
     "@types/react": "^19",
